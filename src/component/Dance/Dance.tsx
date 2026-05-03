@@ -10,6 +10,8 @@ const Dance: React.FC = () => {
   const [requestAnswer, setRequestAnswer] = useState<'pending' | 'yes' | 'no'>('pending');
   const [noCount, setNoCount] = useState(0);
   const [noMessage, setNoMessage] = useState("");
+  const [showGif, setShowGif] = useState(false);
+  const [currentGif, setCurrentGif] = useState("");
   
   // No button position and size state
   const [noButtonPosition, setNoButtonPosition] = useState({ top: 0, left: 0 });
@@ -27,12 +29,23 @@ const Dance: React.FC = () => {
   
   // State for ambiance
   const [candlelightMode, setCandlelightMode] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
   
   // Audio element reference
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const noButtonRef = useRef<HTMLButtonElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  
+  // Working GIFs from reliable sources
+  const reactionGifs = {
+    sad: "https://media1.tenor.com/m/-hxW9E9VkgkAAAAC/puppy-sad.gif",
+    crying: "https://media1.tenor.com/m/NE0zGknMheMAAAAC/sad-cat.gif",
+    pleading: "https://media1.tenor.com/m/1e06I7gFZRYAAAAC/peach-goma.gif",
+    dancing: "https://media1.tenor.com/m/-70gNhKnDL0AAAAC/dancing-heart-heart.gif",
+    celebration: "https://media1.tenor.com/m/BQzDdCm5dfkAAAAC/happy-dance.gif",
+    love: "https://media1.tenor.com/m/8eKvFnM_lbEAAAAd/cute-love.gif",
+    happy: "https://media1.tenor.com/m/xYv0Vb2sKPUAAAAC/happy-dance-yay.gif",
+    shy: "https://media1.tenor.com/m/V0WiWzdM0zQAAAAC/kiss-bear.gif"
+  };
   
   // Romantic music
   const romanticMusic = {
@@ -60,13 +73,13 @@ const Dance: React.FC = () => {
     "This moment is ours forever 💖"
   ];
   
-  // No button messages - persuasive and cute!
+  // No button messages
   const noMessages = [
-    "Sure ka langlinggg? 🥺",
-    "Cge na ba huhuhuu? 💜",
-    "Promise lingaw lageh ni! ✨",
-    "Just one dance langlinggg? 💕",
-    "Kabaw ko na ganahan ka langlinggg! 💙",
+    "Are you sure? 🥺",
+    "Pretty please? 💜",
+    "It'll be fun! ✨",
+    "Just one dance? 💕",
+    "You know you want to! 💙",
     "I promise it'll be magical 💫",
     "Dance with me? 🥰",
     "Say yes to love! 💖",
@@ -78,20 +91,30 @@ const Dance: React.FC = () => {
   const getRandomPosition = () => {
     if (!containerRef.current || !noButtonRef.current) return { top: 0, left: 0 };
     
-    const containerRect = containerRef.current.getBoundingClientRect();
-    const buttonRect = noButtonRef.current.getBoundingClientRect();
     const modalRect = document.querySelector('.dance-request-modal')?.getBoundingClientRect();
+    const buttonRect = noButtonRef.current.getBoundingClientRect();
     
     if (!modalRect) return { top: 0, left: 0 };
     
-    // Calculate safe boundaries within the modal
-    const maxTop = modalRect.height - buttonRect.height - 20;
-    const maxLeft = modalRect.width - buttonRect.width - 20;
+    const maxTop = modalRect.height - buttonRect.height - 60;
+    const maxLeft = modalRect.width - buttonRect.width - 40;
     
     const randomTop = Math.random() * maxTop;
     const randomLeft = Math.random() * maxLeft;
     
-    return { top: randomTop, left: randomLeft };
+    return { top: Math.max(10, randomTop), left: Math.max(10, randomLeft) };
+  };
+  
+  // Show GIF with timeout
+  const showReactionGif = (gifType: keyof typeof reactionGifs, duration: number = 2000) => {
+    const gifUrl = reactionGifs[gifType];
+    if (gifUrl) {
+      setCurrentGif(gifUrl);
+      setShowGif(true);
+      setTimeout(() => {
+        setShowGif(false);
+      }, duration);
+    }
   };
   
   // Handle dance request
@@ -102,6 +125,7 @@ const Dance: React.FC = () => {
     createFloatingHearts();
     createConfetti();
     setShowTutorial(true);
+    showReactionGif('celebration', 3000);
   };
   
   const handleNo = () => {
@@ -110,38 +134,42 @@ const Dance: React.FC = () => {
     setNoMessage(noMessages[Math.min(newCount - 1, noMessages.length - 1)]);
     setRequestAnswer('no');
     
-    // Shrink the button
-    const newSize = Math.max(0.3, 1 - (newCount * 0.15));
+    if (newCount === 1) {
+      showReactionGif('sad', 1500);
+    } else if (newCount === 2) {
+      showReactionGif('crying', 1500);
+    } else if (newCount >= 3) {
+      showReactionGif('pleading', 1800);
+    }
+    
+    const newSize = Math.max(0.3, 1 - (newCount * 0.12));
     setNoButtonSize(newSize);
     
-    // Move the button to random position after 2nd click
     if (newCount >= 2) {
       const newPosition = getRandomPosition();
       setNoButtonPosition(newPosition);
       setButtonMoved(true);
     }
     
-    // After 1.5 seconds, reset to try again
     setTimeout(() => {
       setRequestAnswer('pending');
       if (newCount >= 5) {
-        // After 5 nos, force show a persuasive message
         setNoMessage("💜 Just say YES already! 💙");
+        showReactionGif('shy', 2000);
       }
-    }, 1500);
+    }, 2000);
   };
   
-  // Reset button position and size when modal closes
   useEffect(() => {
     if (!showRequest) {
       setNoCount(0);
       setNoButtonSize(1);
       setButtonMoved(false);
       setNoMessage("");
+      setShowGif(false);
     }
   }, [showRequest]);
   
-  // Handle audio playback
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -154,7 +182,6 @@ const Dance: React.FC = () => {
     }
   }, [isPlaying]);
   
-  // Handle volume change
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume / 100;
@@ -191,13 +218,13 @@ const Dance: React.FC = () => {
   const toggleCandlelight = () => {
     setCandlelightMode(!candlelightMode);
     createFloatingSparkles();
+    showReactionGif('love', 1500);
   };
   
   const celebrate = () => {
-    setShowConfetti(true);
     createConfetti();
     createFloatingHearts();
-    setTimeout(() => setShowConfetti(false), 4000);
+    showReactionGif('happy', 2500);
   };
   
   const createConfetti = () => {
@@ -263,6 +290,7 @@ const Dance: React.FC = () => {
     } else {
       setCurrentStep(0);
       celebrate();
+      showReactionGif('dancing', 2000);
     }
   };
   
@@ -280,13 +308,13 @@ const Dance: React.FC = () => {
     setIsPlaying(false);
     setShowTutorial(false);
     setCurrentStep(0);
+    setShowGif(false);
   };
 
-  // Get button style based on state
   const getNoButtonStyle = () => {
     const style: React.CSSProperties = {
       transform: `scale(${noButtonSize})`,
-      transition: 'transform 0.3s ease, top 0.3s ease, left 0.3s ease',
+      transition: 'transform 0.3s ease, top 0.4s ease, left 0.4s ease',
     };
     
     if (buttonMoved && noButtonPosition) {
@@ -313,6 +341,19 @@ const Dance: React.FC = () => {
         <div className="candlelight-overlay"></div>
       )}
       
+      {showGif && currentGif && (
+        <div className="gif-modal">
+          <img 
+            src={currentGif} 
+            alt="reaction" 
+            className="reaction-gif"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        </div>
+      )}
+      
       <div className="dance-container">
         <div className="dance-header">
           <div className="header-decoration">
@@ -324,7 +365,6 @@ const Dance: React.FC = () => {
           <p className="dance-subtitle">Let the rhythm of love guide your feet 💫</p>
         </div>
         
-        {/* Dance Request Modal */}
         {showRequest && (
           <div className="dance-request-overlay">
             <div className="dance-request-modal" ref={containerRef}>
@@ -342,7 +382,7 @@ const Dance: React.FC = () => {
                 </div>
               )}
               
-              <div className="request-buttons" style={{ position: 'relative', minHeight: '100px' }}>
+              <div className="request-buttons" style={{ position: 'relative', minHeight: '120px' }}>
                 <button 
                   className="request-yes"
                   onClick={handleYes}
@@ -372,15 +412,19 @@ const Dance: React.FC = () => {
                   <p>💜 The button is running away... just say YES! 💙</p>
                 </div>
               )}
+              
+              {noCount >= 5 && (
+                <div className="request-desperate">
+                  <p>😘 I'll do anything! Please say YES! 😘</p>
+                </div>
+              )}
             </div>
           </div>
         )}
         
-        {/* Main Content - only visible after Yes */}
         {!showRequest && (
           <>
             <div className="dance-grid">
-              {/* Music Player */}
               <div className="dance-card glass-card music-player">
                 <div className="card-icon">🎵</div>
                 <h3>Our Romantic Music</h3>
@@ -419,7 +463,6 @@ const Dance: React.FC = () => {
                 <audio ref={audioRef} src={romanticMusic.url} loop />
               </div>
               
-              {/* Dance Tutorial */}
               <div className="dance-card glass-card dance-tutorial">
                 <div className="card-icon">💃</div>
                 <h3>Simple Dance Tutorial</h3>
@@ -468,7 +511,6 @@ const Dance: React.FC = () => {
                 )}
               </div>
               
-              {/* Atmosphere Controls */}
               <div className="dance-card glass-card atmosphere">
                 <div className="card-icon">🕯️</div>
                 <h3>Set the Mood</h3>
@@ -487,7 +529,6 @@ const Dance: React.FC = () => {
                 </div>
               </div>
               
-              {/* Virtual Dance Floor */}
               <div className="dance-card glass-card dance-floor">
                 <div className="card-icon">🪩</div>
                 <h3>Virtual Dance Floor</h3>
@@ -514,7 +555,6 @@ const Dance: React.FC = () => {
                 </div>
               </div>
               
-              {/* Share the Moment */}
               <div className="dance-card glass-card share-moment">
                 <div className="card-icon">📸</div>
                 <h3>Capture the Moment</h3>
@@ -534,13 +574,13 @@ const Dance: React.FC = () => {
               </div>
             </div>
             
-            {/* Final Celebration Button */}
             <div className="final-celebration">
               <button className="final-celebrate-btn" onClick={() => {
                 celebrate();
                 createFloatingHearts();
                 createConfetti();
                 setIsPlaying(true);
+                showReactionGif('dancing', 3000);
               }}>
                 <span>💜</span> Let's Celebrate Our Love! <span>💙</span>
               </button>
@@ -548,7 +588,6 @@ const Dance: React.FC = () => {
           </>
         )}
         
-        {/* Navigation Buttons */}
         <div className="dance-navigation">
           <button className="nav-back-btn" onClick={() => navigate('/letters')}>
             <span>←</span> Back to Letters

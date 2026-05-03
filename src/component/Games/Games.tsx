@@ -20,7 +20,7 @@ const Games: React.FC = () => {
   const [playerAnswers, setPlayerAnswers] = useState<number[]>(new Array(8).fill(-1));
   const [quizScore, setQuizScore] = useState(0);
   const [showAnswers, setShowAnswers] = useState(false);
-  const [player1Name, setPlayer1Name] = useState<string>('My');
+  //const [player1Name, setPlayer1Name] = useState<string>('My');//
   
   // Game 3: Spin the Wheel state
   const [spinning, setSpinning] = useState(false);

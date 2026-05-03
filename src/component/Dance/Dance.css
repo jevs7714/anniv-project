@@ -374,7 +374,7 @@
 
 .preview-emoji {
   font-size: 3rem;
-  display block;
+  display: block;
   margin-bottom: 0.5rem;
   animation: bounce 2s ease-in-out infinite;
 }
@@ -805,7 +805,10 @@
 }
 
 .artwork-emoji {
-  font-size: 2rem;/* Dance Request Overlay */
+  font-size: 2rem;
+}
+
+/* Dance Request Overlay */
 .dance-request-overlay {
   position: fixed;
   top: 0;
@@ -1008,7 +1011,6 @@
   .request-emoji {
     font-size: 2rem;
   }
-}
 }
 
 .song-details {

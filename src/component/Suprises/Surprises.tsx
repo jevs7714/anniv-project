@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Surprises.css';
 
@@ -17,9 +17,6 @@ const Surprises: React.FC = () => {
   const [noteRevealed, setNoteRevealed] = useState(false);
   const [customNote, setCustomNote] = useState("");
   const [savedNote, setSavedNote] = useState("");
-  
-  // Confetti State
-  const [showConfetti, setShowConfetti] = useState(false);
   
   // Virtual Photo Booth State
   const [photoFrame, setPhotoFrame] = useState<'romantic' | 'funny' | 'vintage'>('romantic');
@@ -71,7 +68,6 @@ const Surprises: React.FC = () => {
       setGiftMessage(giftMessages[randomIndex]);
       setGiftOpened(true);
       
-      // Create floating gift emojis
       for (let i = 0; i < 15; i++) {
         setTimeout(() => createFloatingEmoji('🎁', i * 100), i * 100);
       }
@@ -89,11 +85,9 @@ const Surprises: React.FC = () => {
     }
   };
   
-  // Handle Confetti Celebration
+  // Handle Celebration - Fixed without showConfetti
   const celebrate = () => {
-    setShowConfetti(true);
     createConfetti();
-    setTimeout(() => setShowConfetti(false), 3000);
   };
   
   // Create floating emojis
