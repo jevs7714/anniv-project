@@ -119,7 +119,7 @@ const Gallery: React.FC = () => {
       imageUrl: "/images/Messenger_creation_96A83315-60D9-42DD-A339-BB4F4D9A6A4E.jpeg",
       title: "Many more journeys with you asawa ko",
       date: "Unknown",
-      description: "Hi maam!, pwede ko OJT sa imoha? hahahha",
+      description: "Thank you sa pag invite nku sa Ocean Park, mura jud kog ning balik pagka bata. Nice kaayu langlinggg",
       emoji: "🎄"
     },
     {
