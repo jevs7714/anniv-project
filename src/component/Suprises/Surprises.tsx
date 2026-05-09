@@ -30,14 +30,14 @@ const Surprises: React.FC = () => {
   ];
   
   const giftMessages = [
-    "🎁 A romantic dinner date! 💕",
-    "🎁 A cozy movie night at home! 🍿",
-    "🎁 A weekend getaway surprise! ✈️",
-    "🎁 A handwritten love letter! 💌",
-    "🎁 Your favorite dessert! 🍰",
-    "🎁 A relaxing spa day! 🧖‍♀️",
-    "🎁 A beautiful bouquet of flowers! 🌹",
-    "🎁 A star named after us! ⭐"
+    "🎁 Trip to Switzerland 💕",
+    "🎁 1 minute massage 🍿",
+    "🎁 Baby",
+    "🎁 I love you seventy-seven times 💌",
+    "🎁 Your favorite dessert, Kabaw naka wink hahaha",
+    "🎁 Private jet 🧖‍♀️",
+    "🎁 14 kiss in your body 🌹",
+    "🎁 Tiktok dance ⭐"
   ];
   
   const loveQuotes = [
