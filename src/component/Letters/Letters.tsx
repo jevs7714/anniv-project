@@ -255,7 +255,7 @@ I love you so much baby norissa nku my wify mwwwuuaahh hmmmmm. 💜💙`;
                 <iframe
                   width="100%"
                   height="100%"
-                  src="https://www.youtube.com/embed/E05FwDm8B3c?autoplay=1&rel=0"
+                  src="https://www.youtube.com/embed/E05FwDm8B3c"
                   title="Romantic Video Presentation"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
