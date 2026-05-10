@@ -252,7 +252,8 @@ I love you so much baby norissa nku my wify mwwwuuaahh hmmmmm. 💜💙`;
             <div className="video-modal-content" onClick={(e) => e.stopPropagation()}>
               <button className="close-video-btn" onClick={() => setShowVideo(false)}>✕</button>
               <div className="video-wrapper">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/E05FwDm8B3c?si=jIBlyPkxEc-XsM-1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/E05FwDm8B3c?si=jIBlyPkxEc-XsM-1" 
+                title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
               </div>
             </div>
           </div>
